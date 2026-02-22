@@ -1,0 +1,1 @@
+This is a sample text document for validating the RAG Pro TXT loader.

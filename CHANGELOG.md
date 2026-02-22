@@ -1,11 +1,11 @@
 ﻿# Changelog
 
-All notable changes to this project will be documented in this file.
-
-## [0.1.0] - Phase 1 Setup
+## [v0.2-phase2-ingestion]
 ### Added
-- Complete VS Code folder and file structure for production RAG architecture.
-- Python virtual environment configuration with strictly pinned dependencies (Python 3.11.x).
-- `config/settings.py` establishing core parameters (chunk size, overlap, model names).
-- Initial `README.md` and `LICENSE` for portfolio presentation.
-- `.gitignore` configured to exclude sensitive API tokens and large vector store binaries.
+- Document ingestion system with loaders for URL, PDF, DOCX, TXT, and raw text.
+- Master orchestrator function `load_all_sources` with temporary file handling for Streamlit compatibility.
+- Sample documents and validation script for testing and reproducibility.
+
+## [v0.1-phase1-setup]
+### Added
+- Project initialization, environment setup, folder structure, configurations, and initial documentation.
