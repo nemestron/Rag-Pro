@@ -1,11 +1,21 @@
-﻿venv/
-.venv/
+﻿# Environments
 .env
+.venv/
+env/
+venv/
+
+# Python
 __pycache__/
-*.pyc
-*.faiss
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+
+# Vector Stores & Data
 data/vector_stores/
+*.faiss
+*.pkl
+
+# OS Files
 .DS_Store
-*.egg-info/
-dist/
-build/
+Thumbs.db

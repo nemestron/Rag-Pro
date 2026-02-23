@@ -10,6 +10,7 @@ import docx
 # Configure module-level logger
 logger = logging.getLogger(__name__)
 
+
 def load_urls(urls: List[str]) -> List[Document]:
     """
     Load content from a list of URLs using WebBaseLoader.
@@ -39,6 +40,7 @@ def load_urls(urls: List[str]) -> List[Document]:
             logger.warning(f"Failed to load URL {url}: {str(e)}")
 
     return documents
+
 
 def load_pdf(uploaded_file) -> List[Document]:
     """
@@ -79,6 +81,7 @@ def load_pdf(uploaded_file) -> List[Document]:
 
     return documents
 
+
 def load_docx(uploaded_file) -> List[Document]:
     """
     Load content from a Streamlit UploadedFile object representing a DOCX.
@@ -101,10 +104,7 @@ def load_docx(uploaded_file) -> List[Document]:
         content = "\n".join(full_text)
 
         if content.strip():
-            metadata = {
-                "source_type": "docx",
-                "source_name": file_name
-            }
+            metadata = {"source_type": "docx", "source_name": file_name}
             documents.append(Document(page_content=content, metadata=metadata))
 
     except Exception as e:
@@ -112,6 +112,7 @@ def load_docx(uploaded_file) -> List[Document]:
         raise RuntimeError(f"Could not parse DOCX '{file_name}'. Details: {str(e)}")
 
     return documents
+
 
 def load_txt(uploaded_file) -> List[Document]:
     """
@@ -133,10 +134,7 @@ def load_txt(uploaded_file) -> List[Document]:
             content = bytes_data.decode("latin-1")
 
         if content.strip():
-            metadata = {
-                "source_type": "txt",
-                "source_name": file_name
-            }
+            metadata = {"source_type": "txt", "source_name": file_name}
             documents.append(Document(page_content=content, metadata=metadata))
 
     except Exception as e:
@@ -144,6 +142,7 @@ def load_txt(uploaded_file) -> List[Document]:
         raise RuntimeError(f"Could not parse TXT '{file_name}'. Details: {str(e)}")
 
     return documents
+
 
 def load_raw_text(text: str) -> List[Document]:
     """
@@ -153,18 +152,16 @@ def load_raw_text(text: str) -> List[Document]:
         return []
 
     logger.info("Loading raw text input")
-    metadata = {
-        "source_type": "raw_text",
-        "source_name": "user_input"
-    }
+    metadata = {"source_type": "raw_text", "source_name": "user_input"}
     return [Document(page_content=text.strip(), metadata=metadata)]
+
 
 def load_all_sources(
     urls: Optional[List[str]] = None,
     pdf_files: Optional[List[Any]] = None,
     docx_files: Optional[List[Any]] = None,
     txt_files: Optional[List[Any]] = None,
-    raw_text: Optional[str] = ""
+    raw_text: Optional[str] = "",
 ) -> List[Document]:
     """
     Master orchestrator function to load all provided sources into a unified list of Documents.
@@ -195,7 +192,11 @@ def load_all_sources(
         all_documents.extend(load_raw_text(raw_text))
 
     if not all_documents:
-        raise ValueError("No valid document content could be extracted from the provided sources. Please check your files.")
+        raise ValueError(
+            "No valid document content could be extracted from the provided sources. Please check your files."
+        )
 
-    logger.info(f"Successfully loaded a total of {len(all_documents)} document objects across all sources.")
+    logger.info(
+        f"Successfully loaded a total of {len(all_documents)} document objects across all sources."
+    )
     return all_documents
