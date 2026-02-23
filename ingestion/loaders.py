@@ -22,21 +22,22 @@ def load_urls(urls: List[str]) -> List[Document]:
         url = url.strip()
         if not url:
             continue
-            
+
         try:
             logger.info(f"Loading URL: {url}")
             loader = WebBaseLoader(web_paths=[url])
             docs = loader.load()
-            
+
             # Ensure metadata adheres to the contract
             for doc in docs:
                 doc.metadata["source_type"] = "url"
                 doc.metadata["source_name"] = url
-                
+
             documents.extend(docs)
         except Exception as e:
+            # We log URL failures as warnings so one bad URL doesn't crash the whole batch
             logger.warning(f"Failed to load URL {url}: {str(e)}")
-            
+
     return documents
 
 def load_pdf(uploaded_file) -> List[Document]:
@@ -49,7 +50,7 @@ def load_pdf(uploaded_file) -> List[Document]:
 
     file_name = uploaded_file.name
     logger.info(f"Loading PDF: {file_name}")
-    
+
     # PyPDFLoader requires a file path, so we write the in-memory file to a temp file
     try:
         with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as temp_file:
@@ -59,21 +60,23 @@ def load_pdf(uploaded_file) -> List[Document]:
         try:
             loader = PyPDFLoader(file_path=temp_path)
             docs = loader.load()
-            
+
             for doc in docs:
                 doc.metadata["source_type"] = "pdf"
                 doc.metadata["source_name"] = file_name
                 # PyPDFLoader automatically adds 'page' to metadata
-                
+
             documents.extend(docs)
         finally:
             # Ensure temporary file is cleaned up regardless of extraction success
             if os.path.exists(temp_path):
                 os.remove(temp_path)
-                
+
     except Exception as e:
         logger.error(f"Failed to process PDF {file_name}: {str(e)}")
-        
+        # Raise the error so Streamlit can display the exact reason to the user
+        raise RuntimeError(f"Could not parse PDF '{file_name}'. Details: {str(e)}")
+
     return documents
 
 def load_docx(uploaded_file) -> List[Document]:
@@ -86,7 +89,7 @@ def load_docx(uploaded_file) -> List[Document]:
 
     file_name = uploaded_file.name
     logger.info(f"Loading DOCX: {file_name}")
-    
+
     try:
         # python-docx can read directly from a file-like object
         doc = docx.Document(uploaded_file)
@@ -94,19 +97,20 @@ def load_docx(uploaded_file) -> List[Document]:
         for para in doc.paragraphs:
             if para.text.strip():
                 full_text.append(para.text)
-                
+
         content = "\n".join(full_text)
-        
+
         if content.strip():
             metadata = {
                 "source_type": "docx",
                 "source_name": file_name
             }
             documents.append(Document(page_content=content, metadata=metadata))
-            
+
     except Exception as e:
         logger.error(f"Failed to process DOCX {file_name}: {str(e)}")
-        
+        raise RuntimeError(f"Could not parse DOCX '{file_name}'. Details: {str(e)}")
+
     return documents
 
 def load_txt(uploaded_file) -> List[Document]:
@@ -119,7 +123,7 @@ def load_txt(uploaded_file) -> List[Document]:
 
     file_name = uploaded_file.name
     logger.info(f"Loading TXT: {file_name}")
-    
+
     try:
         bytes_data = uploaded_file.getvalue()
         # Attempt UTF-8 decoding first, fallback to latin-1
@@ -127,17 +131,18 @@ def load_txt(uploaded_file) -> List[Document]:
             content = bytes_data.decode("utf-8")
         except UnicodeDecodeError:
             content = bytes_data.decode("latin-1")
-            
+
         if content.strip():
             metadata = {
                 "source_type": "txt",
                 "source_name": file_name
             }
             documents.append(Document(page_content=content, metadata=metadata))
-            
+
     except Exception as e:
         logger.error(f"Failed to process TXT {file_name}: {str(e)}")
-        
+        raise RuntimeError(f"Could not parse TXT '{file_name}'. Details: {str(e)}")
+
     return documents
 
 def load_raw_text(text: str) -> List[Document]:
@@ -146,7 +151,7 @@ def load_raw_text(text: str) -> List[Document]:
     """
     if not text or not text.strip():
         return []
-        
+
     logger.info("Loading raw text input")
     metadata = {
         "source_type": "raw_text",
@@ -165,32 +170,32 @@ def load_all_sources(
     Master orchestrator function to load all provided sources into a unified list of Documents.
     """
     all_documents: List[Document] = []
-    
+
     # Process URLs
     if urls:
         all_documents.extend(load_urls(urls))
-        
+
     # Process PDFs
     if pdf_files:
         for pdf in pdf_files:
             all_documents.extend(load_pdf(pdf))
-            
+
     # Process DOCX files
     if docx_files:
         for docx_file in docx_files:
             all_documents.extend(load_docx(docx_file))
-            
+
     # Process TXT files
     if txt_files:
         for txt_file in txt_files:
             all_documents.extend(load_txt(txt_file))
-            
+
     # Process Raw Text
     if raw_text:
         all_documents.extend(load_raw_text(raw_text))
-        
+
     if not all_documents:
-        raise ValueError("No valid document content could be extracted from the provided sources.")
-        
+        raise ValueError("No valid document content could be extracted from the provided sources. Please check your files.")
+
     logger.info(f"Successfully loaded a total of {len(all_documents)} document objects across all sources.")
     return all_documents

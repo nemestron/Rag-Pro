@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.5] - Phase 5 Complete: Streamlit UI & Application Integration
+- Designed and implemented wide-layout Streamlit interface.
+- Built dynamic sidebar for multi-format ingestion (URL, PDF, DOCX, TXT, Raw Text).
+- Integrated Phase 2, 3, and 4 backend modules into frontend UI.
+- Implemented robust `session_state` management for vector store caching.
+- Created continuous chat interface preserving conversation history.
+- Added UI transparency by displaying retrieved chunks via expander.
+- Implemented comprehensive error handling and UX status indicators.
+
 ## [v0.4] - Phase 4 Complete: LLM Integration & RAG Chain
 - Verified Hugging Face Inference API access.
 - Initialized Meta-Llama-3-8B-Instruct wrapped in `ChatHuggingFace`.
@@ -18,7 +27,7 @@ All notable changes to this project will be documented in this file.
 
 ## [v0.2] - Phase 2 Complete: Document Ingestion
 - Implemented `WebBaseLoader` for URLs.
-- Implemented `PyPDFLoader` with temporary file handling.
+- Implemented `PyPDFLoader` with temporary file handling (updated to `pypdf`).
 - Implemented `python-docx` manual text extraction.
 - Implemented native TXT and raw text input handlers.
 - Created master orchestrator `load_all_sources`.
