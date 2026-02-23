@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.6] - Phase 6 Complete: Testing, Optimization & Validation
+- Created comprehensive unit test suite using `pytest` (29 total tests).
+- Implemented robust `io.BytesIO` mocking for Streamlit `UploadedFile` behavior.
+- Mocked LangChain LLM endpoints and network calls to ensure isolated testing.
+- Built `benchmark_chunking.py` to evaluate chunking configurations.
+- Optimized default parameters to `CHUNK_SIZE=1500` and `CHUNK_OVERLAP=300`.
+- Built `validate_grounding.py` achieving 100% hallucination refusal rate on trick questions.
+- Verified completely green end-to-end test execution.
+
 ## [v0.5] - Phase 5 Complete: Streamlit UI & Application Integration
 - Designed and implemented wide-layout Streamlit interface.
 - Built dynamic sidebar for multi-format ingestion (URL, PDF, DOCX, TXT, Raw Text).
@@ -20,7 +29,7 @@ All notable changes to this project will be documented in this file.
 - Successfully passed end-to-end integration and grounding tests.
 
 ## [v0.3] - Phase 3 Complete: Text Chunking & Embeddings
-- Implemented `RecursiveCharacterTextSplitter` (1000 size / 200 overlap).
+- Implemented `RecursiveCharacterTextSplitter`.
 - Initialized `sentence-transformers/all-MiniLM-L6-v2` embedding model.
 - Built and validated FAISS vector store with local save/load persistence.
 - Created `get_retriever` interface.

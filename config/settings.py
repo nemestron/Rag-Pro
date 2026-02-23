@@ -8,14 +8,11 @@ load_dotenv()
 HUGGINGFACEHUB_API_TOKEN = os.getenv("HUGGINGFACEHUB_API_TOKEN")
 
 # Model Configurations
-EMBEDDING_MODEL_NAME = "sentence-transformers/all-MiniLM-L6-v2"
-LLM_MODEL_NAME = "meta-llama/Meta-Llama-3-8B-Instruct"
+EMBEDDING_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
+LLM_MODEL = "meta-llama/Meta-Llama-3-8B-Instruct"
+TEMPERATURE = 0.3
 
-# RAG Configurations
-CHUNK_SIZE = 1000
-CHUNK_OVERLAP = 200
-TOP_K_RETRIEVAL = 4
-
-# LLM Generation Configurations
-LLM_TEMPERATURE = 0.3
-LLM_MAX_NEW_TOKENS = 512
+# RAG Configurations (Optimized based on Phase 6 Benchmarks)
+CHUNK_SIZE = 1500
+CHUNK_OVERLAP = 300
+TOP_K = 4
