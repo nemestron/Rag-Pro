@@ -218,3 +218,10 @@ st.sidebar.markdown('''
     </a>
 </div>
 ''', unsafe_allow_html=True)
+
+# --- Creator Credit ---
+st.sidebar.markdown('''
+<div style="text-align: center; margin-top: 10px; color: gray; font-size: 14px;">
+    Created by Dhiraj Malwade
+</div>
+''', unsafe_allow_html=True)
