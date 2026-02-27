@@ -206,3 +206,15 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+# --- GitHub and LinkedIn Links ---
+st.sidebar.markdown('''
+<div style="display: flex; justify-content: center; gap: 20px; margin-top: 20px;">
+    <a href="https://github.com/nemestron/Rag-Pro" target="_blank">
+        <img src="https://img.icons8.com/fluent/48/000000/github.png" width="40" height="40" title="GitHub">
+    </a>
+    <a href="https://www.linkedin.com/in/dhiraj-malwade-6a8385399/" target="_blank">
+        <img src="https://img.icons8.com/fluent/48/000000/linkedin.png" width="40" height="40" title="LinkedIn">
+    </a>
+</div>
+''', unsafe_allow_html=True)
